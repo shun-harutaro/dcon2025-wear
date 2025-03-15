@@ -12,7 +12,8 @@ enum Screen {
     RECEIVER_PICKER, 
     STANDBY,
     RECORDING,
-    FINAL_SCREEN
+    FINAL_SCREEN,
+    TRANSCRIPTION,
 };
 
 // アプリケーション全体で使用する状態管理構造体

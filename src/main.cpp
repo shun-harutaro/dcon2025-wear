@@ -1,15 +1,16 @@
 #include <M5Core2.h>
 #include "CUF_24px.h"
 #include "config.h"
-//#include "recorder.h"
-//#include "network.h"
-//#include "openai.h"
 #include "ui/header.h"
 #include "ui/footer.h"
 #include "screens/screen_pick_user.h"
 #include "screens/screen_pick_receiver.h"
 #include "screens/screen_standby.h"
 #include "screens/screen_recording.h"
+#include "audio_recorder.h"
+#include "sd_handler.h"
+#include "whisper_client.h"
+#include "wifi_manager.h"
 
 AppState appState;
 
@@ -17,11 +18,19 @@ void setup() {
   M5.begin();
   M5.Lcd.setTextFont(4);
   M5.Lcd.setFreeFont(&unicode_24px);
+
   appState.currentScreen = USER_PICKER;
   //appState.selectedUser = String(DEFAULT_USER_UUID);
   showUserPickerScreen(appState);
-  //initRecorder();
-  //initNetwork();
+
+  initializeAudioRecorder();
+  connectToWiFi();
+
+  if (initializeSD()) { // SDカードの初期化
+    Serial.println("SD Card initialized.");
+  } else {
+    Serial.println("SD Card not found.");
+  }
 }
 
 void loop() {
@@ -57,6 +66,8 @@ void loop() {
         M5.Axp.SetLDOEnable(3, true);
         delay(75);
         M5.Axp.SetLDOEnable(3, false);
+        appState.currentScreen = TRANSCRIPTION;
+        //showTranscriptionScreen(appState);
       } else if (touch.x > 218) {
         M5.Axp.SetLDOEnable(3, true);
         delay(75);
