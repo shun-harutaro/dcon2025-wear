@@ -34,7 +34,6 @@ public:
     
 
 private:
-    
     uint8_t* audioRingBuffer;
     uint8_t* tempBuffer;
     volatile size_t writeIndex;

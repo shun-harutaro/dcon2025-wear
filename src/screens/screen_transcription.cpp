@@ -59,5 +59,6 @@ void rebootTranscriptionScreen(const AppState &state) {
     M5.Lcd.setCursor(10, 10);
     M5.Lcd.setTextColor(BLACK);
     showHeaderBar(mealTimeToString(state.mealTime) + "レコーディング中");
+
     showFooterBarRecording(state);
 }

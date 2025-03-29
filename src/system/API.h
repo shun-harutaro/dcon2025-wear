@@ -21,7 +21,6 @@ public:
 
   String getmealExtract() const {return mealExtract;};
 
-
   //セッター
   void setuserToken(const String Value) {userToken = Value;};
 

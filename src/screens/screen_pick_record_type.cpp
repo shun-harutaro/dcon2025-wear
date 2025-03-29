@@ -6,6 +6,7 @@ void showRecordTypeScreen(const AppState &state) {
     M5.Lcd.setTextColor(BLACK, WHITE);
     String user = state.selectedUser;
     showHeaderBar("利用者:"+ user);
+
     M5.Lcd.drawRect(69,  40, 86, 75, BLACK);   // 上段 左
     M5.Lcd.drawRect(165, 40, 86, 75, BLACK);  // 上段 右
     M5.Lcd.drawRect(21,  125, 86, 75, BLACK); // 下段 左
@@ -37,6 +38,7 @@ bool handleRecordTypeTouch(const TouchPoint_t &touch, AppState &state) {
         return true;
     }else if (touch.x > 213 && touch.x < 213+86 && touch.y > 125 && touch.y < 125+75) {
         state.selectedRecordType = EVERYDAY;
+
         return true;
     }
     return false;
