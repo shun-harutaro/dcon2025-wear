@@ -11,5 +11,5 @@
 void showTranscriptionScreen(const AppState &state);
 void toggleRecording();
 void rebootTranscriptionScreen(const AppState &state);
-
+String mealTimeToString(MealTime mt);
 #endif

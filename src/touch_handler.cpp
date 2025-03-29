@@ -30,6 +30,10 @@ void handleTouchEvents() {
           changeScreen(TRANSCRIPTION);
         }
         break;
+      case RECORD_TYPE_PICKER:
+        if(handleRecordTypeTouch(touch,appState)){
+          changeScreen(STANDBY);
+        }
     }
   } 
   // フッター部分のタッチ

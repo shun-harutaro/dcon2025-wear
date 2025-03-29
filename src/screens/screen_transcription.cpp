@@ -10,6 +10,17 @@ extern AudioRecorder recorder;
 static String transcriptionText = "";
 static bool isRecording = recorder.isRecording();
 
+String mealTimeToString(MealTime mt) {
+    switch (mt) {
+        case BREAKFAST: return "朝食";
+        case LUNCH:     return "昼食";
+        case DINNER:    return "夕食";
+        default:        return "";
+    }
+}
+
+
+
 void updateTranscriptionText(const String& newText) {
     transcriptionText = newText;
     M5.Lcd.fillScreen(WHITE);
@@ -33,9 +44,11 @@ void showTranscriptionScreen(const AppState &state) {
     M5.Lcd.clear();
     M5.Lcd.fillScreen(WHITE);
     M5.Lcd.setCursor(10, 10);
-    M5.Lcd.setTextColor(BLACK);
-    showHeaderBar("レコーディング中");
+    Serial.println(state.mealTime);
+    showHeaderBar(mealTimeToString(state.mealTime) + "レコーディング中");
     showFooterBarRecording(state);
+
+
     toggleRecording();
 }
 
@@ -45,16 +58,7 @@ void rebootTranscriptionScreen(const AppState &state) {
     M5.Lcd.fillScreen(WHITE);
     M5.Lcd.setCursor(10, 10);
     M5.Lcd.setTextColor(BLACK);
-    showHeaderBar("レコーディング中");
-    showFooterBarRecording(state);
-}
+    showHeaderBar(mealTimeToString(state.mealTime) + "レコーディング中");
 
-
-void rebootTranscriptionScreen(const AppState &state) {
-    M5.Lcd.clear();
-    M5.Lcd.fillScreen(WHITE);
-    M5.Lcd.setCursor(10, 10);
-    M5.Lcd.setTextColor(BLACK);
-    showHeaderBar("レコーディング中");
     showFooterBarRecording(state);
 }

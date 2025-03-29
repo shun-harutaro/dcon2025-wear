@@ -19,13 +19,28 @@ enum Screen {
     RECORD_TYPE_PICKER
 };
 
+enum RecordType{
+    MEAL,
+    DRINK,
+    EXCRETION,
+    BATH,
+    EVERYDAY
+};
+
+enum MealTime{
+    BREAKFAST,
+    LUNCH,
+    DINNER
+};
+
 // アプリケーション全体で使用する状態管理構造体
 struct AppState {
     String selectedUser;     // 選択されたユーザー名
     String selectedReceiver; // 選択された相手の名前
     Screen currentScreen;    //現在のスクリーン
     std::stack<Screen> screenHistory;//戻る用のスクリーンスタック
-    String selectRecordType;
+    RecordType selectedRecordType; //選択された録音種類
+    MealTime mealTime;
 };
 
 #endif
