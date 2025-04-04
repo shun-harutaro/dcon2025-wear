@@ -8,6 +8,8 @@
 #include "services/api/api.h"
 #include "tools/json.h"
 #include <WiFiClientSecure.h>
+#include "services/api/residents.h"
+#include <vector>
 
 AppState appState;
 
@@ -49,23 +51,41 @@ void initializeSystem() {
   api.settenantUid(tenantUid);
   Serial.println(tenantUid);
   //テナントレジデント一覧取得
-  String tenantResident = api.getTenantResident(token);
+  String tenantResident = getTenantResident(api,token);
   Serial.println("tenantUser:");
   Serial.println(tenantResident);
-  String residentUid = getValueInJson(tenantResident,"items","uid");
-  api.setresidentUid(residentUid);
-  Serial.println(residentUid);
+  //抽出する値の設定
+  std::vector<String> fields = { "uid", "familyName", "givenName"};
+  std::vector<Residents> residents = getValueAllInJson(tenantResident,"items",fields);
+  // シリアルで中身を表示する例
+  Serial.println("=== Residents List ===");
+
+  for (size_t i = 0; i < residents.size(); i++) {
+    Serial.print("[" + String(i) + "] uid: ");
+    Serial.println(residents[i].residentUid);
+
+    Serial.print("        familyName: ");
+    Serial.println(residents[i].familyName);
+
+    Serial.print("        givenName : ");
+    Serial.println(residents[i].givenName);
+
+    Serial.println("----------------------");
+  }
+  //api.setresidentUid(residentUid);
+  //Serial.println(residentUid);
   //テナントレジデント作成
   /*
-  String result = api.CreateResidents(
+  String result = createResidents(
+    api,
     token, 
-    "北村",          // familyName
-    "虎汰朗",          // givenName
-    "キタムラ",        // familyNameFurigana
-    "コタロウ",        // givenNameFurigana
-    "2004-12-19",    // dateOfBirth
+    "髙木",          // familyName
+    "透",          // givenName
+    "タカギ",        // familyNameFurigana
+    "トオル",        // givenNameFurigana
+    "2003-11-19",    // dateOfBirth
     "MALE",          // gender
-    "2025-03-25"     // admissionDate
+    "2025-04-02"     // admissionDate
   );
 
   // 結果確認

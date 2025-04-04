@@ -6,6 +6,9 @@
 
 #include <Arduino.h>
 #include <stack>
+#include "../src/services/api/residents.h"
+#include <vector>
+
 
 // 画面を識別する列挙型
 enum Screen { 
@@ -41,6 +44,7 @@ struct AppState {
     std::stack<Screen> screenHistory;//戻る用のスクリーンスタック
     RecordType selectedRecordType; //選択された録音種類
     MealTime mealTime;
+    std::vector<Residents> residentsList;
 };
 
 #endif

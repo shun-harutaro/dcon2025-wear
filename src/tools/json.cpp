@@ -1,5 +1,8 @@
 #include <ArduinoJson.h>
 #include "json.h"
+#include "../services/api/residents.h"
+#include <vector>
+
 //JSONパース関数(HTTPを考慮しない)
 //JSONから任意のパーツを取り出す
 String getJsonValue(const String& jsonText, const String& part) {
@@ -54,3 +57,47 @@ String getJsonValue(const String& jsonText, const String& part) {
   
     return result;
   }
+
+
+
+
+// すべての要素から field に対応する値を取得する関数
+// 第3引数の "fields" は、{ "uid", "familyName", "givenName" } のような配列・リストを想定
+std::vector<Residents> getValueAllInJson(
+    const String& jsonStr,
+    const String& arrayKey,
+    const std::vector<String>& fields  // 例：["uid", "familyName", "givenName"]
+) {
+    // 戻り値用のコンテナ
+    std::vector<Residents> residentsList;
+
+    // ArduinoJsonでパース用のDynamicJsonDocumentを準備 (容量は適宜調整)
+    DynamicJsonDocument doc(4096);
+    DeserializationError err = deserializeJson(doc, jsonStr);
+    if (err) {
+        // JSONパース失敗時は空のリストを返すなど
+        return residentsList;
+    }
+
+    // 配列キー(arrayKey)があるかチェック
+    JsonArray arr = doc[arrayKey].as<JsonArray>();
+    if (arr.isNull()) {
+        // 指定した配列キーが見つからない or 配列でない場合
+        return residentsList;
+    }
+
+    // 配列を走査
+    for (JsonObject obj : arr) {
+        // fields[0], fields[1], fields[2] をそれぞれ取り出す想定
+        // 例: fields[0] = "uid", fields[1] = "familyName", fields[2] = "givenName"
+        String uid   = obj[fields[0]] | "";
+        String fname = obj[fields[1]] | "";
+        String gname = obj[fields[2]] | "";
+
+        // Residents 構造体に入れてプッシュ
+        Residents r(uid, fname, gname);
+        residentsList.push_back(r);
+    }
+
+    return residentsList;
+}
